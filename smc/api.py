@@ -1,6 +1,6 @@
 import requests
 
-class SalesforceMarketingCloud:
+class MarketingCloud:
     """Salesforce Marketing Cloud basic API connector
     """
 
