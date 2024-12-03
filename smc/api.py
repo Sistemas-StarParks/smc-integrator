@@ -24,6 +24,10 @@ class MarketingCloud:
         self._auth = auth_data
         self._token = self._get_token()
 
+    @property
+    def client_id(self) -> str:
+        return self._auth['client_id']
+
     def set_auth_data(self, auth_data: dict[str, str]):
         self._auth = auth_data
 
