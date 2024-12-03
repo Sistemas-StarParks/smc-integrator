@@ -45,6 +45,11 @@ class MarketingCloud:
         return requests.post(f'{self._authURL}/v2/token', data=self._auth).json()['access_token']
 
     def _generate_endpoint_url(self, endpoint: str) -> str:
+        """Generates full endpoint url from endpoint
+
+        :param str endpoint: endpoint string (e.g. v2/contacts)
+        :return str: full URL with baseURL + endpoint
+        """
         return f'{self._baseURL}/{endpoint.strip('/')}'
 
     def get(self, endpoint: str) -> dict:
