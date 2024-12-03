@@ -66,4 +66,4 @@ class MarketingCloud:
             endpoint = self._generate_endpoint_url(endpoint)
 
         response = requests.get(endpoint, headers=headers)
-        return response.json()
+        return response
