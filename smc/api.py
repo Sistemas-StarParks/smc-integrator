@@ -56,5 +56,9 @@ class MarketingCloud:
             'Authorization': f'Bearer {self._token}',
             'Content-Type': 'application/json'
         }
-        response = requests.post(endpoint, headers=headers, json=data)
+
+        if endpoint[:len(self._baseURL)] != self._baseURL:
+            endpoint = self._generate_endpoint_url(endpoint)
+
+        response = requests.get(endpoint, headers=headers)
         return response.json()
