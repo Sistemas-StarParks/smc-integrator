@@ -32,14 +32,26 @@ class MarketingCloud:
     def refresh_token(self):
         self._token = self._get_token()
 
-    def _get_token(self):
+    def _get_token(self) -> str:
         """Retrieves access token from API.
 
         :return str: access token
         """
         return requests.post(f'{self._baseURL}/v2/token', data=self._auth).json()['access_token']
 
-    def get(self, endpoint, data):
+    def _generate_endpoint_url(self, endpoint: str) -> str:
+        return f'{self._baseURL}/{endpoint.strip('/')}'
+
+    def get(self, endpoint: str) -> dict:
+        """Basic GET Request using given endpoint
+
+        Endpoint can either be in the format: `"contacts/v2/contacts"`
+
+        Or with the baseURL already in it.
+
+        :param str endpoint: endpoint
+        :return dict: dictionary response
+        """
         headers = {
             'Authorization': f'Bearer {self._token}',
             'Content-Type': 'application/json'
