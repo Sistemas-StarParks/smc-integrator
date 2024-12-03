@@ -1,3 +1,4 @@
+from math import ceil
 import requests
 
 class MarketingCloud:
@@ -72,3 +73,31 @@ class MarketingCloud:
 
         response = requests.get(endpoint, headers=headers)
         return response
+
+    def _has_token_expired(self, response: dict[str, any]) -> bool:
+        return 'message' in response and response['message'] == 'Not Authorized'
+
+    def _get_customobject(self, object: str, page=1) -> dict[str, any]:
+        return self.get(f'data/v1/customobjectdata/key/{object}/rowset?$page={page}').json()
+
+    def customobject_generator(self, object: str):
+        """Generator that yields responses for the customobjectdata endpoint
+
+        :param str object: object name
+        :yield dict: response dictionary
+        """
+        self.refresh_token()
+        response = self._get_customobject(object)
+
+        yield response
+
+        page_count = ceil(response['count'] / response['pageSize'])
+
+        page = 2
+        while page <= page_count:
+            while self._has_token_expired(response):
+                self.refresh_token()
+                response = self._get_customobject(object, page)
+
+            yield response
+            page += 1
