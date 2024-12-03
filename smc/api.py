@@ -19,7 +19,8 @@ class MarketingCloud:
         :param dict[str, str] auth_data: dictionary with authentication data
         :param str baseURL: base URL for API requests
         """
-        self._baseURL = baseURL
+        self._baseURL = '.'.join(['rest' if s=='auth' else s for s in baseURL.split('.')])
+        self._authURL = baseURL
         self._auth = auth_data
         self._token = self._get_token()
 
@@ -37,7 +38,7 @@ class MarketingCloud:
 
         :return str: access token
         """
-        return requests.post(f'{self._baseURL}/v2/token', data=self._auth).json()['access_token']
+        return requests.post(f'{self._authURL}/v2/token', data=self._auth).json()['access_token']
 
     def _generate_endpoint_url(self, endpoint: str) -> str:
         return f'{self._baseURL}/{endpoint.strip('/')}'
