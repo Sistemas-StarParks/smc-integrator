@@ -91,10 +91,7 @@ class MarketingCloud:
 
         yield response
 
-        page_count = ceil(response['count'] / response['pageSize'])
-
-        page = 2
-        while page <= page_count:
+        while 'next' in response['links']:
             while self._has_token_expired(response):
                 self.refresh_token()
                 response = self._get_customobject(object, page)
