@@ -98,4 +98,3 @@ class MarketingCloud:
                 response = self.get(response['next'])
 
             yield response['items']
-            page += 1
