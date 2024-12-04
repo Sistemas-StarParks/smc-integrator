@@ -96,5 +96,5 @@ class MarketingCloud:
                 self.refresh_token()
                 response = self._get_customobject(object, page)
 
-            yield response
+            yield response['items']
             page += 1
