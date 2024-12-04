@@ -1,4 +1,5 @@
 from math import ceil
+from collections.abc import Generator
 import requests
 
 class MarketingCloud:
@@ -80,7 +81,7 @@ class MarketingCloud:
     def _get_customobject(self, object: str, page=1) -> dict[str, any]:
         return self.get(f'data/v1/customobjectdata/key/{object}/rowset?$page={page}').json()
 
-    def customobject_generator(self, object: str):
+    def customobject_generator(self, object: str) -> Generator[list[dict]]:
         """Generator that yields responses for the customobjectdata endpoint
 
         :param str object: object name
