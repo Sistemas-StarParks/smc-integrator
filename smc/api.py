@@ -95,7 +95,7 @@ class MarketingCloud:
         while 'next' in response['links']:
             while self._has_token_expired(response):
                 self.refresh_token()
-                response = self._get_customobject(object, page)
+                response = self.get(response['next'])
 
             yield response['items']
             page += 1
