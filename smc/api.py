@@ -1,5 +1,5 @@
-from math import ceil
 from collections.abc import Generator
+from pydbcon.connector import DBConnector
 import requests
 
 class MarketingCloud:
