@@ -1,12 +1,13 @@
 from collections.abc import Generator
-from pydbcon.connector import DBConnector
 import requests
 
 class MarketingCloud:
-    """Salesforce Marketing Cloud basic API connector
+    """Salesforce Marketing Cloud basic API connector.
+
+    Links to a single Business Unit Application.
     """
 
-    def __init__(self, auth_data: dict[str, str], baseURL: str):
+    def __init__(self, credentials: dict[str, str], baseURL: str,  data_extensions: list[str]):
         """
         Authentication data may be in the following format:
 
@@ -18,20 +19,27 @@ class MarketingCloud:
         }
         ```
 
-        :param dict[str, str] auth_data: dictionary with authentication data
+        :param dict[str, str] credentials: dictionary with authentication data
         :param str baseURL: base URL for API requests
+        :param list[str] baseURL: list of data extension names
         """
         self._baseURL = '.'.join(['rest' if s=='auth' else s for s in baseURL.split('.')])
         self._authURL = baseURL
-        self._auth = auth_data
+        self._auth = credentials
+        self._data_extensions = data_extensions
         self._token = self._get_token()
 
     @property
     def client_id(self) -> str:
         return self._auth['client_id']
 
-    def set_auth_data(self, auth_data: dict[str, str]):
-        self._auth = auth_data
+    @property
+    def data_extensions(self):
+        for de in self._data_extensions:
+            yield de
+
+    def set_credentials(self, credentials: dict[str, str]):
+        self._auth = credentials
 
     def set_baseURL(self, baseURL: str):
         self._baseURL = baseURL
