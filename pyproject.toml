@@ -1,0 +1,21 @@
+[project]
+name = "marketing_cloud"
+version = "0.0.1"
+dependencies = [
+  "requests",
+]
+authors = [
+  { name="Rodrigo Morais", email="rodrigohmorais@proton.me" },
+]
+description = "Salesforce Marketing Cloud API wrapper."
+readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/Sistemas-StarParks/salesforce-marketing-cloud-integration"
+Issues = "https://github.com/Sistemas-StarParks/salesforce-marketing-cloud-integration/issues"
