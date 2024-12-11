@@ -8,7 +8,7 @@ class BusinessUnitCredentials:
 
 @dataclass
 class BusinessUnit:
-    name: str
+    table: str
     baseURL: str
     credentials: BusinessUnitCredentials
     data_extensions: list[str]
