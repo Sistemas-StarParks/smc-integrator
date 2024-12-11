@@ -7,7 +7,7 @@ class MarketingCloud:
     Links to a single Business Unit Application.
     """
 
-    def __init__(self, credentials: dict[str, str], baseURL: str,  data_extensions: list[str], table: str|None=None):
+    def __init__(self, credentials: dict[str, str], baseURL: str,  data_extensions: list[str]):
         """
         Authentication data may be in the following format:
 
@@ -19,12 +19,10 @@ class MarketingCloud:
         }
         ```
 
-        :param str table: name of the table in the SQL database, defaults to None
         :param dict[str, str] credentials: dictionary with authentication data
         :param str baseURL: base URL for API requests
         :param list[str] baseURL: list of data extension names
         """
-        self._table = table
         self._baseURL = '.'.join(['rest' if s=='auth' else s for s in baseURL.split('.')])
         self._authURL = baseURL
         self._auth = credentials
