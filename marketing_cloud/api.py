@@ -7,7 +7,7 @@ class MarketingCloud:
     Links to a single Business Unit Application.
     """
 
-    def __init__(self, credentials: dict[str, str], baseURL: str,  data_extensions: list[str]):
+    def __init__(self, credentials: dict[str, str], baseURL: str):
         """
         Authentication data may be in the following format:
 
@@ -26,17 +26,11 @@ class MarketingCloud:
         self._baseURL = '.'.join(['rest' if s=='auth' else s for s in baseURL.split('.')])
         self._authURL = baseURL
         self._auth = credentials
-        self._data_extensions = data_extensions
         self._token = self._get_token()
 
     @property
     def client_id(self) -> str:
         return self._auth['client_id']
-
-    @property
-    def data_extensions(self):
-        for de in self._data_extensions:
-            yield de
 
     def set_credentials(self, credentials: dict[str, str]):
         self._auth = credentials
