@@ -92,7 +92,8 @@ class MarketingCloud:
         self.refresh_token()
         response = self._get_customobject(object)
 
-        yield response['items']
+        for item in response['items']:
+            yield item
 
         while 'next' in response['links']:
             while self._has_token_expired(response):
