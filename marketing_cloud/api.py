@@ -96,8 +96,7 @@ class MarketingCloud:
             yield item
 
         while 'next' in response['links']:
-            while self._has_token_expired(response):
-                self.refresh_token()
-                response = self.get(response['next'])
+            self.refresh_token()
+            response = self.get(response['next'])
             for item in response['items']:
                 yield item
