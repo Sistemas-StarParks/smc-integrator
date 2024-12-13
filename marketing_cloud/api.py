@@ -91,12 +91,14 @@ class MarketingCloud:
         """
         self.refresh_token()
         response = self._get_customobject(object)
+        page = 1
 
         for item in response['items']:
             yield item
 
         while 'next' in response['links']:
             self.refresh_token()
-            response = self.get(response['links']['next'])
+            response = self._get_customobject(object, page=page)
             for item in response['items']:
                 yield item
+            page += 1
