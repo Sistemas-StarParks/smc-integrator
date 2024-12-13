@@ -97,6 +97,6 @@ class MarketingCloud:
 
         while 'next' in response['links']:
             self.refresh_token()
-            response = self.get(response['next'])
+            response = self.get(response['links']['next'])
             for item in response['items']:
                 yield item
