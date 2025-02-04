@@ -83,7 +83,7 @@ class MarketingCloud:
     def _get_customobject(self, object: str, page=1) -> dict[str, any]:
         return self.get(f'data/v1/customobjectdata/key/{object}/rowset?$page={page}').json()
 
-    def customobject_generator(self, object: str) -> Generator[list[dict]]:
+    def customobject_generator(self, object: str, starting_page=1) -> Generator[list[dict]]:
         """Generator that yields each item inthe  customobjectdata endpoint
 
         :param str object: object name
@@ -91,7 +91,7 @@ class MarketingCloud:
         """
         self.refresh_token()
         response = self._get_customobject(object)
-        page = 1
+        page = starting_page
 
         for item in response['items']:
             yield item
