@@ -27,6 +27,7 @@ class MarketingCloud:
         self._authURL = baseURL
         self._auth = credentials
         self._token = self._get_token()
+        self.count = None
 
     @property
     def client_id(self) -> str:
@@ -92,6 +93,8 @@ class MarketingCloud:
         self.refresh_token()
         response = self._get_customobject(object)
         page = starting_page
+
+        self.count = response['count']
 
         for item in response['items']:
             yield item
