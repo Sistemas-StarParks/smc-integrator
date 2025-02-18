@@ -81,17 +81,18 @@ class MarketingCloud:
     def _has_token_expired(self, response: dict[str, any]) -> bool:
         return 'message' in response and response['message'] == 'Not Authorized'
 
-    def _get_customobject(self, object: str, page=1) -> dict[str, any]:
-        return self.get(f'data/v1/customobjectdata/key/{object}/rowset?$page={page}').json()
+    def _get_customobject(self, object: str, page=1, request_kwargs: dict[str, str]={}) -> dict[str, any]:
+        kwargs_string = ''.join(f'&${k}={v}' for k, v in request_kwargs.items())
+        return self.get(f'data/v1/customobjectdata/key/{object}/rowset?$page={page}{kwargs_string}').json()
 
-    def customobject_generator(self, object: str, starting_page=1) -> Generator[list[dict]]:
+    def customobject_generator(self, object: str, starting_page=1, request_kwargs: dict[str, str]={}) -> Generator[list[dict]]:
         """Generator that yields each item inthe  customobjectdata endpoint
 
         :param str object: object name
         :yield dict: item from response['items']
         """
         self.refresh_token()
-        response = self._get_customobject(object)
+        response = self._get_customobject(object, request_kwargs=request_kwargs)
         page = starting_page
 
         self.count = response['count']
@@ -101,7 +102,7 @@ class MarketingCloud:
 
         while 'next' in response['links']:
             self.refresh_token()
-            response = self._get_customobject(object, page=page)
+            response = self.get(f"data/{response['links']['next']}").json()
             for item in response['items']:
                 yield item
             page += 1
