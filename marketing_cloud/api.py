@@ -110,4 +110,4 @@ class MarketingCloud:
 
     @staticmethod
     def datetime_from_salesforce(d: str) -> datetime:
-        return datetime.strptime(d, "%d/%m/%Y %I:%M:%S %p")
+        return datetime.strptime(d, "%m/%d/%Y %I:%M:%S %p")
