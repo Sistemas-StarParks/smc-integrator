@@ -1,5 +1,6 @@
 from collections.abc import Generator
 import requests
+from datetime import datetime
 
 class MarketingCloud:
     """Salesforce Marketing Cloud basic API connector.
@@ -106,3 +107,7 @@ class MarketingCloud:
             for item in response['items']:
                 yield item
             page += 1
+
+    @staticmethod
+    def datetime_from_salesforce(d: str) -> datetime:
+        return datetime.strptime(d, "%d/%m/%Y %I:%M:%S %p")
