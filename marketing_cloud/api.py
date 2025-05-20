@@ -30,7 +30,9 @@ class MarketingCloud:
         :param str baseURL: base URL for API requests
         :param list[str] baseURL: list of data extension names
         """
-        self._baseURL = '.'.join(['rest' if s=='auth' else s for s in baseURL.split('.')])
+        self._baseURL = ".".join(
+            ["rest" if s == "auth" else s for s in baseURL.split(".")]
+        )
         self._authURL = baseURL
         self._auth = credentials
         self._token = self._get_token()
@@ -38,7 +40,7 @@ class MarketingCloud:
 
     @property
     def client_id(self) -> str:
-        return self._auth['client_id']
+        return self._auth["client_id"]
 
     def set_credentials(self, credentials: dict[str, str]):
         self._auth = credentials
@@ -54,7 +56,9 @@ class MarketingCloud:
 
         :return str: access token
         """
-        return requests.post(f'{self._authURL}/v2/token', data=self._auth).json()['access_token']
+        return requests.post(f"{self._authURL}/v2/token", data=self._auth).json()[
+            "access_token"
+        ]
 
     def _generate_endpoint_url(self, endpoint: str) -> str:
         """Generates full endpoint url from endpoint
@@ -62,7 +66,7 @@ class MarketingCloud:
         :param str endpoint: endpoint string (e.g. v2/contacts)
         :return str: full URL with baseURL + endpoint
         """
-        return f'{self._baseURL}/{endpoint.strip('/')}'
+        return f"{self._baseURL}/{endpoint.strip('/')}"
 
     def get(self, endpoint: str) -> dict:
         """Basic GET Request using given endpoint
@@ -80,20 +84,26 @@ class MarketingCloud:
             **_other_headers_default,
         }
 
-        if endpoint[:len(self._baseURL)] != self._baseURL:
+        if endpoint[: len(self._baseURL)] != self._baseURL:
             endpoint = self._generate_endpoint_url(endpoint)
 
         response = requests.get(endpoint, headers=headers)
         return response
 
     def _has_token_expired(self, response: dict[str, any]) -> bool:
-        return 'message' in response and response['message'] == 'Not Authorized'
+        return "message" in response and response["message"] == "Not Authorized"
 
-    def _get_customobject(self, object: str, page=1, request_kwargs: dict[str, str]={}) -> dict[str, any]:
-        kwargs_string = ''.join(f'&${k}={v}' for k, v in request_kwargs.items())
-        return self.get(f'data/v1/customobjectdata/key/{object}/rowset?$page={page}{kwargs_string}').json()
+    def _get_customobject(
+        self, object: str, page=1, request_kwargs: dict[str, str] = {}
+    ) -> dict[str, any]:
+        kwargs_string = "".join(f"&${k}={v}" for k, v in request_kwargs.items())
+        return self.get(
+            f"data/v1/customobjectdata/key/{object}/rowset?$page={page}{kwargs_string}"
+        ).json()
 
-    def customobject_generator(self, object: str, starting_page=1, request_kwargs: dict[str, str]={}) -> Generator[list[dict]]:
+    def customobject_generator(
+        self, object: str, starting_page=1, request_kwargs: dict[str, str] = {}
+    ) -> Generator[list[dict]]:
         """Generator that yields each item inthe  customobjectdata endpoint
 
         :param str object: object name
@@ -103,15 +113,15 @@ class MarketingCloud:
         response = self._get_customobject(object, request_kwargs=request_kwargs)
         page = starting_page
 
-        self.count = response['count']
+        self.count = response["count"]
 
-        for item in response['items']:
+        for item in response["items"]:
             yield item
 
-        while 'next' in response['links']:
+        while "next" in response["links"]:
             self.refresh_token()
             response = self.get(f"data/{response['links']['next']}").json()
-            for item in response['items']:
+            for item in response["items"]:
                 yield item
             page += 1
 
