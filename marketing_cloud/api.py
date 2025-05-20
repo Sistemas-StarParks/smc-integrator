@@ -2,6 +2,12 @@ from collections.abc import Generator
 import requests
 from datetime import datetime
 
+
+_other_headers_default = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:138.0) Gecko/20100101 Firefox/138.0"
+}
+
+
 class MarketingCloud:
     """Salesforce Marketing Cloud basic API connector.
 
@@ -69,8 +75,9 @@ class MarketingCloud:
         :return dict: dictionary response
         """
         headers = {
-            'Authorization': f'Bearer {self._token}',
-            'Content-Type': 'application/json'
+            "Authorization": f"Bearer {self._token}",
+            "Content-Type": "application/json",
+            **_other_headers_default,
         }
 
         if endpoint[:len(self._baseURL)] != self._baseURL:
